@@ -3,9 +3,15 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // 注册路由
 Vue.use(VueRouter)
-// 实例化
+import login from '../views/login/login.vue'
+// 路由实例化
 const router = new VueRouter({
-  routes: []
+  routes: [
+    {
+      path: '/login',
+      component: login
+    },
+  ]
 });
 // 暴露出去
 export default router
