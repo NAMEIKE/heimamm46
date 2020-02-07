@@ -1,11 +1,11 @@
 <template>
-  <div>111</div>
+  <div>
+    <el-button type="success">成功按钮</el-button>
+  </div>
 </template>
 <script>
 export default {
-  name:'app'
-}
+  name: "app"
+};
 </script>
-<style>
-
-</style>
+<style></style>
