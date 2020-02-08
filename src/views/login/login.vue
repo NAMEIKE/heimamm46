@@ -7,69 +7,95 @@
         <span class="line"></span>
         <span class="item">用户登录</span>
       </div>
-      <el-form ref="form" :model="form">
+        <!-- 表单 -->
+      <el-form ref="loginForm" :rules="rules" :model="loginForm">
+        <!-- 手机号 -->
         <el-form-item>
-          <el-input
-            v-model="form.name1"
-            prefix-icon="el-icon-user"
-            placeholder="请输入手机号"
-          ></el-input>
-          <el-input
-            v-model="form.name2"
-            prefix-icon="el-icon-lock"
-            placeholder="请输入密码"
-            show-password
-            class="pass"
-          ></el-input>
-          <el-input
-            v-model="form.name3"
-            prefix-icon="el-icon-key"
-            placeholder="请输入验证码"
-            class="verify"
-          ></el-input>
+          <el-input v-model="loginForm.name1" prefix-icon="el-icon-user" placeholder="请输入手机号"></el-input>
+        </el-form-item>
+        <!-- 密码 -->
+        <el-form-item prop="password">
+          <el-input v-model="loginForm.password" prefix-icon="el-icon-lock" placeholder="请输入密码" show-password></el-input>
+        </el-form-item>
+        <!-- 验证码 -->
+        <el-form-item prop="loginCode">
+           <el-row>
+          <el-col :span="17">
+          <el-input v-model="loginForm.loginCode" prefix-icon="el-icon-key" placeholder="请输入验证码"></el-input>
+          </el-col>
+          <el-col :span="7" style="height:40px">
+            <img class="login-code" src="../../assets/mmexport1581169312185.jpg" alt="">
+          </el-col>
+        </el-row>
         </el-form-item>
         <el-form-item>
-          <!-- <el-checkbox-group v-model="form.type"> -->
           <el-checkbox name="type" class="middle"></el-checkbox>
-          <!-- <el-link type="info" :underline="false">我已阅读并同意</el-link> -->
           <span class="text-color">我已阅读并同意</span>
           <el-link type="primary" :underline="false">用户协议</el-link>
           <span class="text-color">和</span>
-          <!-- <el-link type="info" :underline="false">和</el-link> -->
           <el-link type="primary" :underline="false">隐私条款</el-link>
-          <!-- </el-checkbox-group> -->
         </el-form-item>
         <el-form-item>
-          <el-button class="btn" type="primary">登录1</el-button>
-          <br />
-          <el-button class="btn" type="primary">注册1</el-button>
+          <el-button class="btn" type="primary" @click="submitForm('loginForm')">登录</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button class="btn" type="primary" @click="showRegister">注册</el-button>
         </el-form-item>
       </el-form>
     </div>
+    <!-- 右边的图片 -->
     <img src="../../assets/login_banner_ele.png" alt="" />
+    <register ref='register'></register>
   </div>
 </template>
 
 <script>
+// 导入注册组件
+import register from './components/register'
 export default {
   // 组件的名字
   name: "login",
+  components: {
+    register
+  },
   data() {
     return {
-      form: {
+      loginForm: {
         name1: "",
-        name2: "",
-        name3: "",
-        // region: "",
-        // date1: "",
-        // date2: "",
-        // delivery: false,
+        password: "",
+        loginCode: "",
         type: []
-        // resource: "",
-        // desc: ""
+      },
+      // 校验规则
+      rules: {
+        password: [
+          {required: true, message: '密码不能为空', trigger: 'blur'},
+          {min: 6, max: 12, message: '密码的长度为6-12位', trigger: 'blur'},
+        ],
+        loginCode: [
+          {required: true, message: '验证码不能为空', trigger: 'blur'},
+          {min: 4, max: 4, message: '验证码的长度为4位', trigger: 'blur'},
+        ]
       }
     };
-  }
+  },
+  methods: {
+    // 提交表单
+    submitForm(formName){
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$message.success('验证成功');
+        } else {
+          this.$message.error('验证失败');
+          return false;
+        }
+      })
+    },
+    // 显示注册对话框
+    showRegister(){
+      this.$refs.register. dialogFormVisible = true;
+    }
+  },
 };
 </script>
 
@@ -106,15 +132,13 @@ export default {
       margin: 0 12px;
     }
   }
-  .pass {
-    margin: 26px 0;
-  }
-  .verify {
-    width: 284px;
-  }
   .middle {
     vertical-align: middle;
     margin-right: 4px;
+  }
+  .login-code {
+    width: 100%;
+    height: 40px;
   }
   .text-color {
     color: #999;
@@ -122,7 +146,6 @@ export default {
   }
   .btn {
     width: 100%;
-    margin-bottom: 26px;
   }
 }
 </style>
