@@ -31,7 +31,7 @@
           <el-col :span="7" :offset="1" class="register-box">
             <img
               class="register-code"
-              src="../../../assets/mmexport1581169312185.jpg"
+              :src="codeURL"
               alt=""
             />
           </el-col>
@@ -96,6 +96,7 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
+      codeURL: process.env.VUE_APP_URL+'/captcha?type=sendsms',
       form: {
         username: "",
         password: "",
