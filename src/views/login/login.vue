@@ -40,9 +40,15 @@
           <!-- </el-checkbox-group> -->
         </el-form-item>
         <el-form-item>
+<<<<<<< HEAD
           <el-button class="btn" type="primary">登录</el-button>
           <br />
           <el-button class="btn" type="primary">注册</el-button>
+=======
+          <el-button class="btn" type="primary">登录1</el-button>
+          <br />
+          <el-button class="btn" type="primary">注册1</el-button>
+>>>>>>> login
         </el-form-item>
       </el-form>
     </div>
