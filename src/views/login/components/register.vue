@@ -30,6 +30,7 @@
           </el-col>
           <el-col :span="7" :offset="1" class="register-box">
             <img
+              @click="changeCode"
               class="register-code"
               :src="codeURL"
               alt=""
@@ -58,7 +59,6 @@
 </template>
 
 <script>
-// window.console.log(process.env.VUE_APP_URL);
 // 验证手机号的 函数
 const checkPhone = (rule, value, callback) => {
   // 接收参数 value
@@ -131,7 +131,13 @@ export default {
       },
       formLabelWidth: "62px"
     };
-  }
+  },
+  methods: {
+    // 点击改变验证码
+    changeCode(){
+      this.codeURL = process.env.VUE_APP_URL+'/captcha?type=sendsms&t='+Date.now();
+    }
+  },
 };
 </script>
 
