@@ -24,7 +24,7 @@
           <el-input v-model="loginForm.loginCode" prefix-icon="el-icon-key" placeholder="请输入验证码"></el-input>
           </el-col>
           <el-col :span="7" style="height:40px">
-            <img class="login-code" src="../../assets/mmexport1581169312185.jpg" alt="">
+            <img @click="changeCode" class="login-code" :src="codeURL" alt="">
           </el-col>
         </el-row>
         </el-form-item>
@@ -83,10 +83,16 @@ export default {
           // trigger 触发是执行 validator设置的函数
           { validator: checkPhone, trigger: "blur" }
         ],
-      }
+      },
+      // 验证码地址
+      codeURL: process.env.VUE_APP_URL + "/captcha?type=login",
     };
   },
   methods: {
+    // 刷新验证码
+    changeCode(){
+      this.codeURL = process.env.VUE_APP_URL + "/captcha?type=login&t=" + Date.now()
+    },
     // 提交表单
     submitForm(formName){
       this.$refs[formName].validate(valid => {
