@@ -75,7 +75,8 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
+import {sendsms} from '@/api/register.js';
 // 验证手机号的 函数
 const checkPhone = (rule, value, callback) => {
   // 接收参数 value
@@ -165,6 +166,18 @@ export default {
     },
     // 获取短信验证码
     getSMS() {
+      // 手机号校验
+      const reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+      if (reg.test(this.form.phone) != true) {
+        this.$message.error('手机号格式不对,请重新输入');
+        return;
+      }
+      // 图片验证码校验
+      if (this.form.code.length != 4) {
+        // 这样return也可以
+        return this.$message.error('验证码的长度不对,请重检查');
+      }
+      // 获取短信倒计时
       if (this.delay == 0) {
         this.delay = 60;
         const timeID = setInterval(() => {
@@ -175,14 +188,18 @@ export default {
         }, 1000);
       }
       // 调用接口
-      axios({
-        url: process.env.VUE_APP_URL + "/sendsms",
-        method: "post",
-        data: {
-          code: this.form.code,
-          phone: this.form.phone
-        },
-        withCredentials: true
+      // axios({
+      //   url: process.env.VUE_APP_URL + "/sendsms",
+      //   method: "post",
+      //   data: {
+      //     code: this.form.code,
+      //     phone: this.form.phone
+      //   },
+      //   withCredentials: true
+      // })
+      sendsms({
+        code: this.form.code,
+        phone: this.form.phone
       }).then(res => {
         //成功回调
         // window.console.log(res)
