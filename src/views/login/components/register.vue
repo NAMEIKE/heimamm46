@@ -7,7 +7,7 @@
     :visible.sync="dialogFormVisible"
   >
     <el-form status-icon :model="form" :rules="rules" ref="registerForm">
-      <el-form-item label="头像">
+      <el-form-item label="头像" prop="avatar">
         <!-- 用户头像 -->
         <el-upload
           class="avatar-uploader"
@@ -129,7 +129,9 @@ export default {
         // 邮箱
         email: "",
         code: "",
-        name: ""
+        // 头像
+        avatar: '',
+        name: "",
       },
       rules: {
         username: [
@@ -153,6 +155,9 @@ export default {
         email: [
           { required: true, message: "邮箱不能为空", trigger: "blur" },
           { validator: checkEmail, trigger: "blur" }
+        ],
+        avatar: [
+          { required: true, message: "用户头像不能为空", trigger: "blur" },
         ]
       },
       formLabelWidth: "62px"
@@ -215,14 +220,16 @@ export default {
       window.console.log(res)
       // URL.createObjectURL 生成的是本地的临时路径,刷新就没用了
       this.imageUrl = URL.createObjectURL(file.raw);
+      // 保存服务器返回的地址
+      this.form.avatar = res.data.file_path;
     },
     // 上传之前的效验函数
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg" || "imgage/png";
+      const isJPG = file.type === "image/jpeg" || "imgage/png" || "imgage/gif";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+        this.$message.error("上传头像只能是图片格式!");
       }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
