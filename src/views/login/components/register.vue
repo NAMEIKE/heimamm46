@@ -37,7 +37,7 @@
           show-password
         ></el-input>
       </el-form-item>
-      <el-form-item label="验证码" :label-width="formLabelWidth">
+      <el-form-item label="图形码" :label-width="formLabelWidth">
         <el-row>
           <el-col :span="16">
             <el-input v-model="form.code" autocomplete="off"></el-input>
@@ -52,10 +52,10 @@
           </el-col>
         </el-row>
       </el-form-item>
-      <el-form-item label="图形码" :label-width="formLabelWidth">
+      <el-form-item label="验证码" :label-width="formLabelWidth">
         <el-row>
           <el-col :span="16">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
+            <el-input v-model="form.rcode" autocomplete="off"></el-input>
           </el-col>
           <el-col :span="7" :offset="1">
             <el-button @click="getSMS" :disabled="delay != 0">
@@ -67,7 +67,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogFormVisible = false"
+      <el-button type="primary" @click="submitForm('registerForm')"
         >确 定</el-button
       >
     </div>
@@ -122,16 +122,20 @@ export default {
       // 头像上传的接口地址
       upUrl: process.env.VUE_APP_URL + "/uploads",
       form: {
+        // 用户名
         username: "",
+        // 密码
         password: "",
         // 手机号
         phone: "",
         // 邮箱
         email: "",
+        // 图形验证码
         code: "",
         // 头像
         avatar: '',
-        name: "",
+        // 短信验证码
+        rcode: "",
       },
       rules: {
         username: [
@@ -235,6 +239,17 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
+    },
+    // 表单的提交方法
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$message.success('验证成功')
+        } else {
+          this.$message.error('验证失败')
+          return false;
+        }
+      })
     }
   }
 };
