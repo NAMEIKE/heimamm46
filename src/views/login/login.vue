@@ -53,6 +53,7 @@
 // 导入注册组件
 import register from './components/register'
 import {checkPhone} from '@/utils/validator.js'
+import {login} from '@/api/login.js';
 
 export default {
   // 组件的名字
@@ -96,8 +97,30 @@ export default {
     // 提交表单
     submitForm(formName){
       this.$refs[formName].validate(valid => {
+        // 成功
         if (valid) {
-          this.$message.success('验证成功');
+          // 验证是否勾选
+          if (this.loginForm.isChecked != true) {
+            return this.$message.warning('请勾选用户协议')
+          }
+          // 验证通过
+          login({
+            phone: this.loginForm.phone,
+            password: this.loginForm.password,
+            code: this.loginForm.loginCode
+          }).then(res => {
+            if (res.data.code===200) {
+              this.$message.success('登录成功啦')
+              // 服务器返回了token
+              // token 保存到 哪里 localStorage（一直都在）  SessionStorage(刷新消失)
+              window.localStorage.setItem('heimammToken',res.data.data.token)
+              // 跳转到首页
+              this.$router.push('/index')
+            }else if (res.data.code===202) {
+              this.$message.error(res.data.message)
+            }
+          })
+          // 失败
         } else {
           this.$message.error('验证失败');
           return false;
