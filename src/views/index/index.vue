@@ -20,9 +20,27 @@
 </template>
 
 <script>
-export default {};
+// 导入接口
+import {info} from '@/api/index.js';
+export default {
+  name: 'index',
+  data() {
+    return {
+      // 用户名
+      username: '',
+      // 用户头像
+      userIcon: ''
+    }
+  },
+  created() {
+    info().then(res => {
+      this.username = res.data.data.username;
+      // 服务器返回的头像地址不完整，需要进行拼接
+      this.userIcon = process.env.VUE_APP_URL+"/"+res.data.data.avatar
+    })
+  },
+};
 </script>
-
 <style lang="less">
 .my-container {
   height: 100%;
