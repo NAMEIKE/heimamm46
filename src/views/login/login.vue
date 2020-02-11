@@ -10,8 +10,8 @@
         <!-- 表单 -->
       <el-form ref="loginForm" :rules="rules" :model="loginForm">
         <!-- 手机号 -->
-        <el-form-item>
-          <el-input v-model="loginForm.name1" prefix-icon="el-icon-user" placeholder="请输入手机号"></el-input>
+        <el-form-item prop="phone">
+          <el-input v-model="loginForm.phone" prefix-icon="el-icon-user" placeholder="请输入手机号"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
@@ -36,12 +36,6 @@
           <el-link type="primary" :underline="false">隐私条款</el-link>
         </el-form-item>
         <el-form-item>
-          <el-button class="btn" type="primary">登录</el-button>
-          <br />
-          <el-button class="btn" type="primary">注册</el-button>
-          <el-button class="btn" type="primary">登录1</el-button>
-          <br />
-          <el-button class="btn" type="primary">注册1</el-button>
           <el-button class="btn" type="primary" @click="submitForm('loginForm')">登录</el-button>
         </el-form-item>
         <el-form-item>
@@ -58,6 +52,8 @@
 <script>
 // 导入注册组件
 import register from './components/register'
+import {checkPhone} from '@/utils/validator.js'
+
 export default {
   // 组件的名字
   name: "login",
@@ -67,7 +63,7 @@ export default {
   data() {
     return {
       loginForm: {
-        name1: "",
+        phone: "",
         password: "",
         loginCode: "",
         type: []
@@ -81,7 +77,12 @@ export default {
         loginCode: [
           {required: true, message: '验证码不能为空', trigger: 'blur'},
           {min: 4, max: 4, message: '验证码的长度为4位', trigger: 'blur'},
-        ]
+        ],
+        phone: [
+          { required: true, message: "手机号不能为空", trigger: "blur" },
+          // trigger 触发是执行 validator设置的函数
+          { validator: checkPhone, trigger: "blur" }
+        ],
       }
     };
   },

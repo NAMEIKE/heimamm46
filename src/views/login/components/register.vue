@@ -77,39 +77,8 @@
 <script>
 // import axios from "axios";
 import {sendsms,register} from '@/api/register.js';
-// 验证手机号的 函数
-const checkPhone = (rule, value, callback) => {
-  // 接收参数 value
-  // 定义正则表达式
-  const reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
-  // 使用正则校验格式是否满足
-  if (reg.test(value) == true) {
-    // 对
-    callback();
-  } else {
-    // 错
-    callback(new Error("手机号格式不对哦，请检查"));
-  }
-};
+import {checkPhone , checkEmail} from '@/utils/validator.js'
 
-// 验证 邮箱的 函数
-// rule 校验规则，一般不用
-// value 校验的数据  表单元素中的数据
-// callback 回调函数 ，通过执行这个函数 告诉 element-ui 成功或者失败
-const checkEmail = (rule, value, callback) => {
-  // 获取数据 value
-  // 定义正则表达式 定义了一个正则对象
-  const reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
-  // 校验方法 test 方法 是正则对象
-  // 对 返回的是 true
-  // 错 返回的是 false
-  // console.log(reg.test(value))
-  if (reg.test(value) == true) {
-    callback();
-  } else {
-    callback(new Error("邮箱的格式不对哦"));
-  }
-};
 export default {
   data() {
     return {
