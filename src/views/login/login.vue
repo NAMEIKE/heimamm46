@@ -54,7 +54,7 @@
 import register from './components/register'
 import {checkPhone} from '@/utils/validator.js'
 import {login} from '@/api/login.js';
-
+import setToken from '@/utils/token.js';
 export default {
   // 组件的名字
   name: "login",
@@ -113,7 +113,8 @@ export default {
               this.$message.success('登录成功啦')
               // 服务器返回了token
               // token 保存到 哪里 localStorage（一直都在）  SessionStorage(刷新消失)
-              window.localStorage.setItem('heimammToken',res.data.data.token)
+              // window.localStorage.setItem('heimammToken',res.data.data.token)
+              setToken(res.data.data.token)
               // 跳转到首页
               this.$router.push('/index')
             }else if (res.data.code===202) {
