@@ -13,7 +13,9 @@
       </div>
     </el-header>
     <el-container>
+      <!-- 侧边栏 -->
       <el-aside width="auto" class="my-aside">
+        <!-- 导航菜单 -->
         <el-menu router  :default-active="$route.path" class="el-menu-vertical-demo" :collapse="isCollapse">
             <el-menu-item index="/index/chart">
                 <!-- 图标 -->
