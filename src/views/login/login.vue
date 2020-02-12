@@ -29,7 +29,7 @@
         </el-row>
         </el-form-item>
         <el-form-item>
-          <el-checkbox name="type" class="middle"></el-checkbox>
+          <el-checkbox v-model="loginForm.isChecked" class="middle"></el-checkbox>
           <span class="text-color">我已阅读并同意</span>
           <el-link type="primary" :underline="false">用户协议</el-link>
           <span class="text-color">和</span>
@@ -54,7 +54,7 @@
 import register from './components/register'
 import {checkPhone} from '@/utils/validator.js'
 import {login} from '@/api/login.js';
-import setToken from '@/utils/token.js';
+import {setToken} from '@/utils/token.js';
 export default {
   // 组件的名字
   name: "login",
@@ -67,7 +67,7 @@ export default {
         phone: "",
         password: "",
         loginCode: "",
-        type: []
+        isChecked: ''
       },
       // 校验规则
       rules: {
@@ -114,9 +114,9 @@ export default {
               // 服务器返回了token
               // token 保存到 哪里 localStorage（一直都在）  SessionStorage(刷新消失)
               // window.localStorage.setItem('heimammToken',res.data.data.token)
-              setToken(res.data.data.token)
+               setToken(res.data.data.token);
               // 跳转到首页
-              this.$router.push('/index')
+              this.$router.push('/index');
             }else if (res.data.code===202) {
               this.$message.error(res.data.message)
             }

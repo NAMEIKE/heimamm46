@@ -51,7 +51,8 @@
 <script>
 // 导入接口
 import {info,logout} from '@/api/index.js';
-import {removeToken} from '@/utils/token.js';
+// 导入token函数
+import {removeToken,getToken} from '@/utils/token.js';
 export default {
   name: 'index',
   data() {
@@ -84,6 +85,14 @@ export default {
           // 点击取消
         });
       }
+  },
+  // 生命周期钩子
+  beforeCreate() {
+    if (getToken() == undefined) {
+      this.$message.warning('小子,你还没登录呢');
+      // 打回登录页
+      this.$router.push('/login');
+    }
   },
   created() {
     info().then(res => {
