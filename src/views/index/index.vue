@@ -16,28 +16,33 @@
       <!-- 侧边栏 -->
       <el-aside width="auto" class="my-aside">
         <!-- 导航菜单 -->
-        <el-menu router  :default-active="$route.path" class="el-menu-vertical-demo" :collapse="isCollapse">
-            <el-menu-item index="/index/chart">
-                <!-- 图标 -->
-                <i class="el-icon-pie-chart"></i>
-                <span slot="title">数据概览</span>
-            </el-menu-item>
-            <el-menu-item index="/index/user">
-                <i class="el-icon-user"></i>
-                <span slot="title">用户列表</span>
-            </el-menu-item>
-           <el-menu-item index="/index/question">
-                <i class="el-icon-edit-outline"></i>
-                <span slot="title">题库列表</span>
-            </el-menu-item>
-            <el-menu-item index="/index/enterprise">
-                <i class="el-icon-office-building"></i>
-                <span slot="title">企业列表</span>
-            </el-menu-item>
-            <el-menu-item index="/index/subject">
-                <i class="el-icon-notebook-2"></i>
-                <span slot="title">学科列表</span>
-            </el-menu-item>
+        <el-menu
+          router
+          :default-active="$route.path"
+          class="el-menu-vertical-demo"
+          :collapse="isCollapse"
+        >
+          <el-menu-item index="/index/chart">
+            <!-- 图标 -->
+            <i class="el-icon-pie-chart"></i>
+            <span slot="title">数据概览</span>
+          </el-menu-item>
+          <el-menu-item index="/index/user">
+            <i class="el-icon-user"></i>
+            <span slot="title">用户列表</span>
+          </el-menu-item>
+          <el-menu-item index="/index/question">
+            <i class="el-icon-edit-outline"></i>
+            <span slot="title">题库列表</span>
+          </el-menu-item>
+          <el-menu-item index="/index/enterprise">
+            <i class="el-icon-office-building"></i>
+            <span slot="title">企业列表</span>
+          </el-menu-item>
+          <el-menu-item index="/index/subject">
+            <i class="el-icon-notebook-2"></i>
+            <span slot="title">学科列表</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main class="my-main">
@@ -50,57 +55,65 @@
 
 <script>
 // 导入接口
-import {info,logout} from '@/api/index.js';
+import { info, logout } from "@/api/index.js";
 // 导入token函数
-import {removeToken,getToken} from '@/utils/token.js';
+import { removeToken, getToken } from "@/utils/token.js";
 export default {
-  name: 'index',
+  name: "index",
   data() {
     return {
       // 用户名
-      username: '',
+      username: "",
       // 用户头像
-      userIcon: '',
+      userIcon: "",
       // 是否折叠
-      isCollapse: false,
-    }
+      isCollapse: false
+    };
   },
   methods: {
     logout() {
-        this.$confirm('你真的要狠心离开吗?', '提示', {
-          confirmButtonText: '狠心离开',
-          cancelButtonText: '继续看看',
-          type: 'success'
-        }).then(() => {
+      this.$confirm("你真的要狠心离开吗?", "提示", {
+        confirmButtonText: "狠心离开",
+        cancelButtonText: "继续看看",
+        type: "success"
+      })
+        .then(() => {
           // 点击确定
           logout().then(res => {
-            if (res.data.code===200) {
+            if (res.data.code === 200) {
               // 移除token
-              removeToken()
+              removeToken();
               // 去登录页
-              this.$router.push('./login')
+              this.$router.push("/login");
             }
-          })
-        }).catch(() => {
+          });
+        })
+        .catch(() => {
           // 点击取消
         });
-      }
+    }
   },
   // 生命周期钩子
   beforeCreate() {
     if (getToken() == undefined) {
-      this.$message.warning('小子,你还没登录呢');
+      this.$message.warning("小子,你还没登录呢");
       // 打回登录页
-      this.$router.push('/login');
+      this.$router.push("/login");
     }
   },
   created() {
     info().then(res => {
-      this.username = res.data.data.username;
-      // 服务器返回的头像地址不完整，需要进行拼接
-      this.userIcon = process.env.VUE_APP_URL+"/"+res.data.data.avatar
-    })
-  },
+      if (res.data.code === 206) {
+        this.$message.warning("登录状态有误,请重新登录");
+        removeToken();
+        this.$router.push("/login");
+      } else if (this.data.code === 200) {
+        this.username = res.data.data.username;
+        // 服务器返回的头像地址不完整，需要进行拼接
+        this.userIcon = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
+      }
+    });
+  }
 };
 </script>
 <style lang="less">
@@ -131,7 +144,7 @@ export default {
       font-size: 22px;
       font-family: Microsoft YaHei;
       font-weight: bold;
-      color: #49A1FF;
+      color: #49a1ff;
     }
   }
   .right {
