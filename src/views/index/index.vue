@@ -2,7 +2,7 @@
   <el-container class="my-container">
     <el-header class="my-header">
       <div class="left">
-        <i class="el-icon-s-fold"></i>
+        <i class="el-icon-s-fold" @click="isCollapse = !isCollapse"></i>
         <img src="../../assets/矢量智能对象 拷贝 9.png" alt="" />
         <span>黑马面面</span>
       </div>
@@ -13,8 +13,8 @@
       </div>
     </el-header>
     <el-container>
-      <el-aside width="200px" class="my-aside">
-        <el-menu default-active="2" class="el-menu-vertical-demo">
+      <el-aside width="auto" class="my-aside">
+        <el-menu default-active="2" class="el-menu-vertical-demo" :collapse="isCollapse">
             <el-menu-item index="1">
                 <!-- 图标 -->
                 <i class="el-icon-pie-chart"></i>
@@ -54,7 +54,9 @@ export default {
       // 用户名
       username: '',
       // 用户头像
-      userIcon: ''
+      userIcon: '',
+      // 是否折叠
+      isCollapse: false,
     }
   },
   methods: {
@@ -134,6 +136,11 @@ export default {
   }
   .my-main {
     background: #0094ff;
+  }
+  /* c3中的transition（过渡），需要有开始和结束的值 */
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
   }
 }
 </style>
