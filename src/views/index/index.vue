@@ -55,9 +55,9 @@
 
 <script>
 // 导入接口
-import { info, logout } from "@/api/index.js";
+import { logout } from "@/api/index.js";
 // 导入token函数
-import { removeToken, getToken } from "@/utils/token.js";
+import { removeToken } from "@/utils/token.js";
 export default {
   name: "index",
   data() {
@@ -94,26 +94,26 @@ export default {
     }
   },
   // 生命周期钩子
-  beforeCreate() {
-    if (getToken() == undefined) {
-      this.$message.warning("小子,你还没登录呢");
-      // 打回登录页
-      this.$router.push("/login");
-    }
-  },
-  created() {
-    info().then(res => {
-      if (res.data.code === 206) {
-        this.$message.warning("登录状态有误,请重新登录");
-        removeToken();
-        this.$router.push("/login");
-      } else if (this.data.code === 200) {
-        this.username = res.data.data.username;
-        // 服务器返回的头像地址不完整，需要进行拼接
-        this.userIcon = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
-      }
-    });
-  }
+  // beforeCreate() {
+  //   if (getToken() == undefined) {
+  //     this.$message.warning("小子,你还没登录呢");
+  //     // 打回登录页
+  //     this.$router.push("/login");
+  //   }
+  // },
+  // created() {
+  //   info().then(res => {
+  //     if (res.data.code === 206) {
+  //       this.$message.warning("登录状态有误,请重新登录");
+  //       removeToken();
+  //       this.$router.push("/login");
+  //     } else if (this.data.code === 200) {
+  //       this.username = res.data.data.username;
+  //       // 服务器返回的头像地址不完整，需要进行拼接
+  //       this.userIcon = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
+  //     }
+  //   });
+  // }
 };
 </script>
 <style lang="less">

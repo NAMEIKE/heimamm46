@@ -7,6 +7,12 @@ Vue.use(VueRouter)
 import NProgress from 'nprogress';
 // 导入进度条样式
 import 'nprogress/nprogress.css'
+// 导入token的工具函数 获取token
+import {getToken,removeToken} from '@/utils/token.js';
+// 导入用户信息获取接口
+import {info} from '@/api/index.js';
+// 按需导入Element-ui的弹框
+import { Message } from 'element-ui';
 
 import login from '../views/login/login.vue'
 import index from '../views/index/index.vue';
@@ -62,8 +68,33 @@ const router = new VueRouter({
 router.beforeEach((to,form,next) => {
   // 开启进度条
   NProgress.start()
-  // 向后走
-  next()
+  // 判断访问的页面
+  if (to.path != 'login') {
+    // 判断token非空
+    if (getToken() == undefined) {
+      // 为空
+      // 这里的this不是vue实例 想要用vue弹框提示需要导入弹框的组件
+      Message.warning('登录状态有误,请检查');
+      // 返回登录页
+      next('/login');
+    }else {
+      // 不为空
+      info().then(res => {
+        if (res.data.code === 206) {
+          Message.warning('登录状态有误,请检查');
+          // 删除token
+          removeToken();
+          next('/login');
+        } else if(res.data.code === 200) {
+          // 获取成功,就放走
+          next()
+        }
+      })
+    }
+  }else {
+    // 是登录页
+    next();
+  }
 })
 // 导航守卫 afterEach 进入完成之后
 router.afterEach(() => {
