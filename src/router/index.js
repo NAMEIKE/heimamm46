@@ -41,35 +41,56 @@ const router = new VueRouter({
     },
     {
       path: '/login',
-      component: login
+      component: login,
+      meta: {
+        title: "登录"
+      },
     },
     {
       path: '/index',
       component: index,
+      meta: {
+        title: "首页"
+      },
       // 嵌套的路由规则
       children: [{
           // 地址不需要写/
           // 最终解析的是 /index/chart'
           path: 'chart',
-          component: chart
+          component: chart,
+          meta: {
+            title: "数据概览"
+          },
         },
         {
           // 地址不需要写/
           // 最终解析的是 /index/enterprise
-          path: 'enterprise',
-          component: enterprise
+          path: 'user',
+          component: user,
+          meta: {
+            title: "用户列表"
+          },
         },
         {
           path: 'question',
-          component: question
+          component: question,
+          meta: {
+            title: "题库列表"
+          },
+        },
+        {
+          path: 'enterprise',
+          component: enterprise,
+          meta: {
+            title: "企业列表"
+          },
         },
         {
           path: 'subject',
-          component: subject
-        },
-        {
-          path: 'user',
-          component: user
+          component: subject,
+          meta: {
+            title: "学科列表"
+          },
         },
       ]
     },
@@ -118,9 +139,10 @@ router.beforeEach((to, form, next) => {
   }
 })
 // 导航守卫 afterEach 进入完成之后
-router.afterEach(() => {
+router.afterEach( to => {
   // 关闭进度条
-  NProgress.done()
+  NProgress.done();
+  window.document.title = to.meta.title;
 })
 // 暴露出去
 export default router
