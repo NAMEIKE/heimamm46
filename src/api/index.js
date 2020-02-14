@@ -1,7 +1,7 @@
 // 导入 axios
 import axios from 'axios';
 // 导入token工具函数
-import { getToken} from '../utils/token.js'
+import { getToken } from '../utils/token.js'
 
 const indexRequest = axios.create({
     // 基地址
