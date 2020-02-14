@@ -3,7 +3,7 @@ import axios from 'axios'
 // 导入token工具函数
 import { getToken } from '../utils/token.js'
 
-const subiectRequest = axios.create({
+const subjectRequest = axios.create({
   // 基地址
   baseURL:process.env.VUE_APP_URL,
   // 是否跨域

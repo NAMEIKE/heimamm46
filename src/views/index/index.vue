@@ -81,11 +81,11 @@ export default {
           // 点击确定
           logout().then(res => {
             if (res.data.code === 200) {
+              // 移除用户登录头像和名字
+              this.$store.commit('changeIcon','');
+              this.$store.commit('changeName','');
               // 移除token
               removeToken();
-              // 移除用户登录头像和名字
-              this.store.commit('changeIcon','');
-              this.store.commit('changeName','');
               // 去登录页
               this.$router.push("/login");
             }
