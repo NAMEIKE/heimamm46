@@ -7,6 +7,8 @@ Vue.use(VueRouter)
 import NProgress from 'nprogress';
 // 导入进度条样式
 import 'nprogress/nprogress.css'
+// 导入仓库
+import store from '@/store/index.js'
 // 导入token的工具函数 获取token
 import {
   getToken,
@@ -128,6 +130,13 @@ router.beforeEach((to, form, next) => {
           NProgress.done()
           next('/login');
         } else if (res.data.code === 200) {
+          // 用户名字
+          const username = res.data.data.username;
+          // 用户头像
+          const userIcon = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
+          // 调用仓库的方法
+          store.commit('changeIcon',userIcon);
+          store.commit('changeName',username);
           // 获取成功,就放走
           next()
         }
