@@ -142,6 +142,7 @@ router.beforeEach((to, form, next) => {
 router.afterEach( to => {
   // 关闭进度条
   NProgress.done();
+  // 修改标题
   window.document.title = to.meta.title;
 })
 // 暴露出去
