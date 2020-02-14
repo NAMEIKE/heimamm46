@@ -8,11 +8,18 @@ import NProgress from 'nprogress';
 // 导入进度条样式
 import 'nprogress/nprogress.css'
 // 导入token的工具函数 获取token
-import {getToken,removeToken} from '@/utils/token.js';
+import {
+  getToken,
+  removeToken
+} from '@/utils/token.js';
 // 导入用户信息获取接口
-import {info} from '@/api/index.js';
+import {
+  info
+} from '@/api/index.js';
 // 按需导入Element-ui的弹框
-import { Message } from 'element-ui';
+import {
+  Message
+} from 'element-ui';
 
 import login from '../views/login/login.vue'
 import index from '../views/index/index.vue';
@@ -26,6 +33,12 @@ import user from '../views/index/user/user.vue'
 // 路由实例化
 const router = new VueRouter({
   routes: [
+    // 空地址的重定向
+    {
+      path: '/',
+      redirect: login,
+      // component: login
+    },
     {
       path: '/login',
       component: login
@@ -34,8 +47,7 @@ const router = new VueRouter({
       path: '/index',
       component: index,
       // 嵌套的路由规则
-      children: [
-        {
+      children: [{
           // 地址不需要写/
           // 最终解析的是 /index/chart'
           path: 'chart',
@@ -68,35 +80,39 @@ const router = new VueRouter({
 const whitePaths = ['/login'];
 
 // 导航守卫 beforeEach 进入之前
-router.beforeEach((to,form,next) => {
+router.beforeEach((to, form, next) => {
   // 开启进度条
   NProgress.start()
   // 判断访问的页面
   // if (to.path != 'login') {
   // 用路由白名单判断 加 转小写
-  if(whitePaths.includes(to.path.toLocaleLowerCase()) != true) {
+  if (whitePaths.includes(to.path.toLocaleLowerCase()) != true) {
     // 判断token非空
     if (getToken() == undefined) {
       // 为空
       // 这里的this不是vue实例 想要用vue弹框提示需要导入弹框的组件
       Message.warning('登录状态有误,请检查');
+      // 关闭进度条
+      NProgress.done()
       // 返回登录页
       next('/login');
-    }else {
+    } else {
       // 不为空
       info().then(res => {
         if (res.data.code === 206) {
           Message.warning('登录状态有误,请检查');
           // 删除token
           removeToken();
+          // 关闭进度条
+          NProgress.done()
           next('/login');
-        } else if(res.data.code === 200) {
+        } else if (res.data.code === 200) {
           // 获取成功,就放走
           next()
         }
       })
     }
-  }else {
+  } else {
     // 是登录页
     next();
   }
@@ -108,4 +124,3 @@ router.afterEach(() => {
 })
 // 暴露出去
 export default router
-
