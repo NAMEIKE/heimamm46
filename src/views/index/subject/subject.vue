@@ -23,8 +23,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit" class="search">搜索</el-button>
-          <el-button @click="onSubmit">清除</el-button>
+          <el-button type="primary" class="search">搜索</el-button>
+          <el-button>清除</el-button>
           <el-button icon="el-icon-plus" type="primary" @click="$refs.subjectAdd.dialogFormVisible=true"
             >新增学科</el-button
           >
@@ -35,7 +35,7 @@
     <el-card class="bottom-card">
       <!-- 表格 -->
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column type="index" :index="indexMethod" label="序号"></el-table-column>
+        <el-table-column type="index" :index="index" label="序号"></el-table-column>
         <el-table-column prop="rid" label="学科编号"></el-table-column>
         <el-table-column prop="name" label="学科名称"></el-table-column>
         <el-table-column prop="short_name" label="简称"></el-table-column>
@@ -127,7 +127,7 @@ export default {
     },
     getData() {
       subjectList().then(res=>{
-      window.console.log(res);
+      // window.console.log(res);
       this.tableData = res.data.items
     })
     }
