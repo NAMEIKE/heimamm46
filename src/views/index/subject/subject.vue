@@ -119,16 +119,33 @@ export default {
       window.console.log(index, row);
     },
     // 分页
+    // 页容量改变
     sizeChange(val) {
-      window.console.log(`每页 ${val} 条`);
+      // window.console.log(`每页 ${val} 条`);
+      // 返回第一页
+      this.index = 1
+      // 设置新的页容量
+      this.size = val
+      this.getData()
     },
+    // 页码改变
     currentChange(val) {
-      window.console.log(`当前页: ${val}`);
+      // window.console.log(`当前页: ${val}`);
+      // 保存页容量
+      this.index = val
+      this.getData()
     },
     getData() {
-      subjectList().then(res=>{
+      subjectList({
+      // 页码
+      page: this.index,
+      // 页容量
+      limit: this.size
+      }).then(res=>{
       // window.console.log(res);
       this.tableData = res.data.items
+      // 总条数保存起来
+      this.total = res.data.pagination.total;
     })
     }
   },
