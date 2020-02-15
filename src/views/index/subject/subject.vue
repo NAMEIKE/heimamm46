@@ -2,29 +2,30 @@
   <div class="subject-container">
     <!-- 顶部盒子 -->
     <el-card class="top-card">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="学科编号">
-          <el-input v-model="formInline.user" class="w100"></el-input>
+      <el-form :inline="true" :model="formInline" class="demo-form-inline" ref="formInline">
+        <el-form-item label="学科编号" prop="rid">
+          <el-input v-model="formInline.rid" class="w100"></el-input>
         </el-form-item>
-        <el-form-item label="学科名称">
-          <el-input v-model="formInline.user" class="w150"></el-input>
+        <el-form-item label="学科名称" prop="name">
+          <el-input v-model="formInline.name" class="w150"></el-input>
         </el-form-item>
-        <el-form-item label="创建者">
-          <el-input v-model="formInline.user" class="w100"></el-input>
+        <el-form-item label="创建者" prop="username">
+          <el-input v-model="formInline.username" class="w100"></el-input>
         </el-form-item>
-        <el-form-item label="状态">
+        <el-form-item label="状态" prop="status">
           <el-select
-            v-model="formInline.region"
+            v-model="formInline.status"
             placeholder="请选择状态"
             class="w150"
           >
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+            <el-option label="所有" value="2"></el-option>
+            <el-option label="启动" value="1"></el-option>
+            <el-option label="禁用" value="0"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="search">搜索</el-button>
-          <el-button>清除</el-button>
+          <el-button type="primary" class="search" @click="searchSubject">查询</el-button>
+          <el-button @click="clearSearch">清除</el-button>
           <el-button icon="el-icon-plus" type="primary" @click="$refs.subjectAdd.dialogFormVisible=true"
             >新增学科</el-button
           >
@@ -86,8 +87,14 @@ export default {
     return {
       // 顶部表单
       formInline: {
-        user: "",
-        region: ""
+        // 学科编号
+        rid: '',
+        // 学科名称
+        name: '',
+        // 创建者
+        user: '',
+        // 状态
+        status: ''
       },
       // 表格数据
       tableData: [],
@@ -135,12 +142,28 @@ export default {
       this.index = val
       this.getData()
     },
+    // 学科搜索
+    searchSubject() {
+      // 跳回第一页
+      this.index = 1;
+      // 调用getData
+      this.getData()
+    },
+    // 清除
+    clearSearch() {
+      // 清除表单
+      this.$refs.formInline.resetFields();
+      this.index = 1;
+      this.getData()
+    },
     getData() {
       subjectList({
       // 页码
       page: this.index,
       // 页容量
-      limit: this.size
+      limit: this.size,
+      // 合并筛选条件
+      ...this.formInline
       }).then(res=>{
       // window.console.log(res);
       this.tableData = res.data.items
