@@ -36,16 +36,23 @@
       <!-- 表格 -->
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column type="index" :index="indexMethod" label="序号"></el-table-column>
-        <el-table-column prop="date" label="学科编号" width="180">
+        <el-table-column prop="rid" label="学科编号"></el-table-column>
+        <el-table-column prop="name" label="学科名称"></el-table-column>
+        <el-table-column prop="short_name" label="简称"></el-table-column>
+        <el-table-column prop="username" label="创建者"></el-table-column>
+        <el-table-column prop="create_time" label="创建日期" width="180"></el-table-column>
+        <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status===1">启用</span>
+            <span v-else style="color:red">禁用</span>
+          </template>
         </el-table-column>
-        <el-table-column prop="name" label="学科名称" width="180">
-        </el-table-column>
-        <el-table-column prop="address" label="简称"></el-table-column>
-        <el-table-column prop="address" label="创建者"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button type="text" size="mini" @click="handleNotAllow(scope.$index, scope.row)">禁用</el-button>
+            <el-button type="text" size="mini" @click="handleNotAllow(scope.$index, scope.row)">
+              {{scope.row.status===1 ? '禁用':'启动'}}
+            </el-button>
             <el-button type="text" size="mini" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -67,6 +74,7 @@
 </template>
 
 <script>
+import {subjectList,subjectStatus} from '@/api/subject.js'
 export default {
   name: "subject",
   data() {
@@ -77,28 +85,7 @@ export default {
         region: ""
       },
       // 表格数据
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ],
+      tableData: [],
       // 分页数据
       // 页码
       index: 1,
@@ -114,7 +101,14 @@ export default {
       window.console.log(index, row);
     },
     handleNotAllow(index, row) {
-       window.console.log(index, row);
+       subjectStatus({
+         id: row.id
+       }).then(res=>{
+         if (res.code === 200) {
+           this.$message.success('状态修改成功')
+           this.getData()
+         }
+       })
     },
     handleDelete(index, row) {
       window.console.log(index, row);
@@ -125,8 +119,17 @@ export default {
     },
     currentChange(val) {
       window.console.log(`当前页: ${val}`);
+    },
+    getData() {
+      subjectList().then(res=>{
+      window.console.log(res);
+      this.tableData = res.data.items
+    })
     }
-  }
+  },
+  created() {
+    this.getData()
+  },
 };
 </script>
 
@@ -141,7 +144,7 @@ export default {
       width: 150px;
     }
     .search {
-      margin-left: 25px;
+      margin-left: 8px;
     }
   }
   // 底部盒子
