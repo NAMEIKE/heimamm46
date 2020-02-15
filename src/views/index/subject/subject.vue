@@ -72,16 +72,19 @@
     </el-pagination>
     </el-card>
     <subjectAdd ref="subjectAdd"></subjectAdd>
+    <subjectEdit ref="subjectEdit"></subjectEdit>
   </div>
 </template>
 
 <script>
-import {subjectList,subjectStatus} from '@/api/subject.js'
+import {subjectList,subjectStatus,subjectRemove} from '@/api/subject.js'
 import subjectAdd from './components/subjectAdd'
+import subjectEdit from './components/subjectEdit'
 export default {
   name: "subject",
   components:{
-    subjectAdd
+    subjectAdd,
+    subjectEdit
   },
   data() {
     return {
@@ -109,9 +112,17 @@ export default {
   },
   methods: {
     // 三个按钮绑定的方法
+    // 编辑
     handleEdit(index, row) {
-      window.console.log(index, row);
+      // window.console.log(index, row);
+      // 弹出编辑
+      this.$refs.subjectEdit.dialogFormVisible = true;
+      // 把这一行的数据赋值给弹框
+      // this.$refs.subjectEdit.form = row;
+      // 复杂数据赋值有联动,要经过特殊转换处理
+      this.$refs.subjectEdit.form = JSON.parse(JSON.stringify(row));
     },
+    // 禁用/启动
     handleNotAllow(index, row) {
        subjectStatus({
          id: row.id
@@ -122,8 +133,27 @@ export default {
          }
        })
     },
+    // 删除
     handleDelete(index, row) {
-      window.console.log(index, row);
+      // window.console.log(index, row);
+      let id = row.id;
+      this.$confirm('此操作将永久删除该学科, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // 调用删除接口
+          subjectRemove({
+            id
+          }).then(res=>{
+            if (res.code == 200) {
+              this.$message.success('删除成功');
+              this.getData()
+            }
+          });
+        }).catch(() => {
+          
+        });
     },
     // 分页
     // 页容量改变

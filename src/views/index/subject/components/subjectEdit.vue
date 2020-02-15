@@ -1,6 +1,6 @@
 <template>
-  <el-dialog class="subject-add" center title="新增学科" :visible.sync="dialogFormVisible" width="600px">
-    <el-form :model="form" ref="subjectAdd" :rules="rules">
+  <el-dialog class="subject-edit" center title="编辑学科" :visible.sync="dialogFormVisible" width="600px">
+    <el-form :model="form" ref="subjectEdit" :rules="rules">
       <el-form-item prop="rid" label="学科编号" :label-width="formLabelWidth">
         <el-input v-model="form.rid" autocomplete="off"></el-input>
       </el-form-item>
@@ -19,15 +19,15 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click="submitForm('subjectAdd')">确 定</el-button>
+      <el-button type="primary" @click="submitForm('subjectEdit')">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import {subjectAdd} from '@/api/subject.js'
+import {subjectEdit} from '@/api/subject.js'
 export default {
-  name: "subjectAdd",
+  name: "subjectEdit",
   data() {
     return {
       dialogFormVisible: false,
@@ -54,20 +54,20 @@ export default {
      submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            subjectAdd(this.form).then(res=>{
+            subjectEdit(this.form).then(res=>{
               if (res.code === 200) {
                 this.dialogFormVisible = false;
                 // 清空对话框
                  this.$refs[formName].resetFields();
                 // 重新获取数据 渲染列表
                 this.$parent.getData();
-                this.$message.success('新增成功');
+                this.$message.success('修改成功');
               }else if (res.code === 201) {
-                this.$message.warning(res.message)
+                this.$message.warning('学科编号不能重复,请检查')
               }
             })
           } else {
-            this.$message.error('数据验证失败,请检查');
+            this.$message.error('数据校验失败,请检查');
             return false;
           }
         });
@@ -76,7 +76,7 @@ export default {
 };
 </script>
 <style lang="less">
-  .subject-add {
+  .subject-edit {
     .el-dialog__header{
       background: linear-gradient(to right,#00c6f9,#1495fb);
     }
