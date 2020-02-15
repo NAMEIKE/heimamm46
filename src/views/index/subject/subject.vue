@@ -25,7 +25,7 @@
         <el-form-item>
           <el-button type="primary" @click="onSubmit" class="search">搜索</el-button>
           <el-button @click="onSubmit">清除</el-button>
-          <el-button icon="el-icon-plus" type="primary" @click="onSubmit"
+          <el-button icon="el-icon-plus" type="primary" @click="$refs.subjectAdd.dialogFormVisible=true"
             >新增学科</el-button
           >
         </el-form-item>
@@ -70,13 +70,18 @@
       :total="total">
     </el-pagination>
     </el-card>
+    <subjectAdd ref="subjectAdd"></subjectAdd>
   </div>
 </template>
 
 <script>
 import {subjectList,subjectStatus} from '@/api/subject.js'
+import subjectAdd from './components/subjectAdd'
 export default {
   name: "subject",
+  components:{
+    subjectAdd
+  },
   data() {
     return {
       // 顶部表单
