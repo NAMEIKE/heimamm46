@@ -108,7 +108,7 @@
   </div>
 </template>
 <script>
-import {enterpriseList,} from '@/api/enterprise.js'
+import {enterpriseList,enterpriseRemove} from '@/api/enterprise.js'
 import enterpriseAdd from './components/enterpriseAdd.vue'
 export default {
   name: "enterprise",
@@ -166,6 +166,32 @@ export default {
       this.index = 1;
       this.getData();
     },
+    // 删除数据
+    handleDelete(index,row) {
+      let id = row.id;
+       this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          enterpriseRemove({
+            id
+          }).then(res => {
+            if (res.code == 200) {
+              this.$message.success("删除成功");
+              // 页码异常处理
+              if (this.tableData.length == 1) {
+                // 判断页码
+                if (this.index > 1) {
+                  this.index--;
+                }
+              }
+              this.getData();
+            }
+          }) 
+        }).catch(() => {});
+    },
+    // 获取数据
     getData() {
       enterpriseList({
         // 页码
