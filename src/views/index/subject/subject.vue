@@ -50,12 +50,13 @@
           type="index"
           :index="index"
           label="序号"
+          width="50px"
         ></el-table-column>
         <el-table-column prop="rid" label="学科编号"></el-table-column>
         <el-table-column prop="name" label="学科名称"></el-table-column>
         <el-table-column prop="short_name" label="简称"></el-table-column>
         <el-table-column prop="username" label="创建者"></el-table-column>
-        <el-table-column prop="create_time" label="创建日期" width="180">
+        <el-table-column prop="create_time" label="创建日期">
           <template slot-scope="scope">
             {{ scope.row.create_time | formatTime }}
           </template>

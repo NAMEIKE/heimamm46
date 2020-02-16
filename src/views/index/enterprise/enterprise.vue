@@ -8,8 +8,8 @@
         class="demo-form-inline"
         ref="formInline"
       >
-        <el-form-item label="企业编号" prop="rid">
-          <el-input v-model="formInline.rid" class="w100"></el-input>
+        <el-form-item label="企业编号" prop="eid">
+          <el-input v-model="formInline.eid" class="w100"></el-input>
         </el-form-item>
         <el-form-item label="企业名称" prop="name">
           <el-input v-model="formInline.name" class="w150"></el-input>
@@ -36,7 +36,7 @@
           <el-button
             icon="el-icon-plus"
             type="primary"
-            @click="$refs.subjectAdd.dialogFormVisible = true"
+            @click="$refs.enterpriseAdd.dialogFormVisible = true"
             >新增企业</el-button
           >
         </el-form-item>
@@ -50,13 +50,21 @@
           type="index"
           :index="index"
           label="序号"
+          width="50px"
         ></el-table-column>
-        <el-table-column prop="rid" label="企业编号"></el-table-column>
+        <el-table-column prop="eid" label="企业编号"></el-table-column>
         <el-table-column prop="name" label="企业名称"></el-table-column>
         <el-table-column prop="username" label="创建者"></el-table-column>
-        <el-table-column prop="create_time" label="创建日期" width="180">
+        <el-table-column prop="create_time" label="创建日期">
+          <template slot-scope="scope">
+            {{scope.row.create_time | formatTime}}
+          </template>
         </el-table-column>
         <el-table-column prop="status" label="状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status==1">启用</span>
+            <span v-else style="color:red">禁用</span>
+          </template>
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -71,7 +79,7 @@
               size="mini"
               @click="handleNotAllow(scope.$index, scope.row)"
             >
-              {{ scope.row.status === 1 ? "禁用" : "启动" }}
+              {{ scope.row.status == 1 ? "禁用" : "启动" }}
             </el-button>
             <el-button
               type="text"
@@ -96,18 +104,23 @@
       >
       </el-pagination>
     </el-card>
+    <enterpriseAdd ref="enterpriseAdd"></enterpriseAdd>
   </div>
 </template>
-
 <script>
+import {enterpriseList} from '@/api/enterprise.js'
+import enterpriseAdd from './components/enterpriseAdd.vue'
 export default {
   name: "enterprise",
+  components: {
+    enterpriseAdd
+  },
   data() {
     return {
       // 顶部表单
       formInline: {
         // 学科编号
-        rid: "",
+        eid: "",
         // 学科名称
         name: "",
         // 创建者
@@ -117,26 +130,7 @@ export default {
       },
       // 表格数据
       tableData: [
-         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        },
-        {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
+    
       ],
       // 分页数据
       // 页码
@@ -146,7 +140,17 @@ export default {
       // 总条数
       total: 20
     };
-  }
+  },
+  methods: {
+    getData() {
+      enterpriseList().then(res => {
+      this.tableData = res.data.items;
+    })
+    }
+  },
+  created() {
+    this.getData();
+  },
 };
 </script>
 

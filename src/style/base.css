@@ -4,8 +4,21 @@ body {
   margin: 0;
   height: 100%;
 }
+
 div {
   box-sizing: border-box;
 }
+
 /* VUE_APP_URL=http://183.237.67.218:3002 */
 /* VUE_APP_URL=http://127.0.0.1/heimamm/public */
+.el-dialog__header {
+  background: linear-gradient(to right, #00c6f9, #1495fb);
+}
+
+.el-dialog__title {
+  color: white;
+}
+
+.el-dialog__header .el-dialog__close {
+  color: white;
+}

@@ -277,12 +277,12 @@ export default {
     display: block;
   }
   //上面是头像
-  .el-dialog__header {
-    background: linear-gradient(to right, #01c5fb, #1197f9);
-  }
-  .el-dialog__title {
-    color: white;
-  }
+  // .el-dialog__header {
+  //   background: linear-gradient(to right, #01c5fb, #1197f9);
+  // }
+  // .el-dialog__title {
+  //   color: white;
+  // }
   .register-box {
     height: 40px;
   }
