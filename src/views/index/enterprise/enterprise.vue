@@ -142,6 +142,17 @@ export default {
     };
   },
   methods: {
+    // 页容量改变
+    sizeChange(newSize) {
+      this.size = newSize;
+      this.index = 1;
+      this.getData()
+    },
+    // 页码改变
+    currentChange(newIndex) {
+      this.index = newIndex;
+      this.getData()
+    },
     // 企业查询
     searchEnterprise() {
        // 跳回第一页
