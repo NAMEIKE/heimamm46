@@ -105,15 +105,18 @@
       </el-pagination>
     </el-card>
     <enterpriseAdd ref="enterpriseAdd"></enterpriseAdd>
+    <enterpriseEdit ref="enterpriseEdit"></enterpriseEdit>
   </div>
 </template>
 <script>
 import {enterpriseList,enterpriseRemove,enterpriseStatus} from '@/api/enterprise.js'
 import enterpriseAdd from './components/enterpriseAdd.vue'
+import enterpriseEdit from './components/enterpriseEdit.vue'
 export default {
   name: "enterprise",
   components: {
-    enterpriseAdd
+    enterpriseAdd,
+    enterpriseEdit
   },
   data() {
     return {
@@ -165,6 +168,21 @@ export default {
       this.$refs.formInline.resetFields();
       this.index = 1;
       this.getData();
+    },
+    // 编辑按钮
+    handleEdit(index,row) {
+       // window.console.log(index, row);
+      // 弹出编辑
+      this.$refs.enterpriseEdit.dialogFormVisible = true;
+      // 如果id改变了，说明是重新编辑 再赋值
+      if (row.id != this.$refs.enterpriseEdit.form.id) {
+        // 把这一行的数据赋值给弹框
+        // this.$refs.subjectEdit.form = row;
+        // 复杂数据赋值有联动,要经过特殊转换处理
+        this.$refs.enterpriseEdit.form = JSON.parse(JSON.stringify(row));
+      } else {
+        // 相等的不用执行
+      }
     },
     // 状态修改
     handleStatus(index,row) {
