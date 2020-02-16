@@ -10,7 +10,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './style/base.css'
 // 注册ElementUI
 Vue.use(ElementUI);
-
+// 导入全局过滤器
+import '@/filters/index.js'
 Vue.config.productionTip = false
 
 new Vue({
