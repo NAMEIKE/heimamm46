@@ -70,7 +70,7 @@ export default {
                 this.dialogFormVisible = false;
                 // 清空表单
                 this.$refs[formName].resetFields();
-                this.$panent.getData()
+                this.$parent.getData()
               }
             })
           } else {

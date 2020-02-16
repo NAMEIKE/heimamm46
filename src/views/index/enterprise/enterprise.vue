@@ -23,13 +23,13 @@
             placeholder="请选择状态"
             class="w150"
           >
-            <el-option label="所有" value="2"></el-option>
+            <el-option label="所有" value=""></el-option>
             <el-option label="启动" value="1"></el-option>
             <el-option label="禁用" value="0"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="search" @click="searchSubject"
+          <el-button type="primary" class="search" @click="searchEnterprise"
             >查询</el-button
           >
           <el-button @click="clearSearch">清除</el-button>
@@ -108,7 +108,7 @@
   </div>
 </template>
 <script>
-import {enterpriseList} from '@/api/enterprise.js'
+import {enterpriseList,} from '@/api/enterprise.js'
 import enterpriseAdd from './components/enterpriseAdd.vue'
 export default {
   name: "enterprise",
@@ -142,9 +142,31 @@ export default {
     };
   },
   methods: {
+    // 企业查询
+    searchEnterprise() {
+       // 跳回第一页
+      this.index = 1;
+      this.getData();
+    },
+    // 清除
+    clearSearch() {
+      // 清除表单
+      this.$refs.formInline.resetFields();
+      this.index = 1;
+      this.getData();
+    },
     getData() {
-      enterpriseList().then(res => {
+      enterpriseList({
+        // 页码
+        page: this.index,
+        // 页容量
+        limit: this.size,
+        // 将筛选条件合并
+        ...this.formInline
+      }).then(res => {
       this.tableData = res.data.items;
+      // 总条数保存起来
+      this.total = res.data.pagination.total;
     })
     }
   },
