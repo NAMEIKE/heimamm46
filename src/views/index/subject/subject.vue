@@ -150,10 +150,15 @@ export default {
       // window.console.log(index, row);
       // 弹出编辑
       this.$refs.subjectEdit.dialogFormVisible = true;
-      // 把这一行的数据赋值给弹框
-      // this.$refs.subjectEdit.form = row;
-      // 复杂数据赋值有联动,要经过特殊转换处理
-      this.$refs.subjectEdit.form = JSON.parse(JSON.stringify(row));
+      // 如果id改变了，说明是重新编辑 再赋值
+      if (row.id != this.$refs.subjectEdit.form.id) {
+        // 把这一行的数据赋值给弹框
+        // this.$refs.subjectEdit.form = row;
+        // 复杂数据赋值有联动,要经过特殊转换处理
+        this.$refs.subjectEdit.form = JSON.parse(JSON.stringify(row));
+      } else {
+        // 相等的不用执行
+      }
     },
     // 禁用/启动
     handleNotAllow(index, row) {
