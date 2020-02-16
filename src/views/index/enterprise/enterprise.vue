@@ -77,7 +77,7 @@
             <el-button
               type="text"
               size="mini"
-              @click="handleNotAllow(scope.$index, scope.row)"
+              @click="handleStatus(scope.$index, scope.row)"
             >
               {{ scope.row.status == 1 ? "禁用" : "启动" }}
             </el-button>
@@ -108,7 +108,7 @@
   </div>
 </template>
 <script>
-import {enterpriseList,enterpriseRemove} from '@/api/enterprise.js'
+import {enterpriseList,enterpriseRemove,enterpriseStatus} from '@/api/enterprise.js'
 import enterpriseAdd from './components/enterpriseAdd.vue'
 export default {
   name: "enterprise",
@@ -166,16 +166,26 @@ export default {
       this.index = 1;
       this.getData();
     },
+    // 状态修改
+    handleStatus(index,row) {
+      enterpriseStatus({
+        id: row.id
+      }).then(res => {
+        if(res.code == 200) {
+          this.$message.success('状态修改成功');
+          this.getData()
+        }
+      })
+    },
     // 删除数据
     handleDelete(index,row) {
-      let id = row.id;
        this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           enterpriseRemove({
-            id
+            id: row.id
           }).then(res => {
             if (res.code == 200) {
               this.$message.success("删除成功");
