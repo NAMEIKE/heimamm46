@@ -161,15 +161,7 @@ export default {
     },
     // 新增按钮
     added() {
-      this.$refs.enterpriseDialog.dialogFormVisible = true;
-      // this.$refs.enterpriseDialog.isEdit = false;
-      // if (this.$refs.enterpriseDialog.$refs.enterpriseDialog != null) {
-      //   this.$refs.enterpriseDialog.$refs.enterpriseDialog.resetFields();
-      // }
-      this.$refs.enterpriseDialog.$nextTick(() => {
-        this.$refs.enterpriseDialog.isEdit = false;
-        this.$refs.enterpriseDialog.$refs.enterpriseDialog.resetFields();
-      })
+      this.$refs.enterpriseDialog.show()
     },
     // 企业查询
     searchEnterprise() {
@@ -186,9 +178,9 @@ export default {
     },
     // 编辑按钮
     handleEdit(index,row) {
-       // window.console.log(index, row);
+      // window.console.log(index, row);
       // 弹出编辑
-      this.$refs.enterpriseDialog.dialogFormVisible = true;
+      // this.$refs.enterpriseDialog.dialogFormVisible = true;
       // this.$refs.enterpriseDialog.isEdit = true;
       // // 如果id改变了，说明是重新编辑 再赋值
       // if (row.id != this.$refs.enterpriseDialog.form.id) {
@@ -199,10 +191,7 @@ export default {
       // } else {
       //   // 相等的不用执行
       // }
-      this.$refs.enterpriseDialog.$nextTick(() => {
-        this.$refs.enterpriseDialog.isEdit = true;
-        this.$refs.enterpriseDialog.form = JSON.parse(JSON.stringify(row));
-      })
+      this.$refs.enterpriseDialog.show(JSON.parse(JSON.stringify(row)))
     },
     // 状态修改
     handleStatus(index,row) {

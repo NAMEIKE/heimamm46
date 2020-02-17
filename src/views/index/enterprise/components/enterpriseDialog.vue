@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { enterpriseEdit,enterpriseAdd } from "@/api/enterprise.js";
+import { enterpriseEdit, enterpriseAdd } from "@/api/enterprise.js";
 export default {
   name: "enterpriseDialog",
   data() {
@@ -72,6 +72,30 @@ export default {
     };
   },
   methods: {
+    // 显示对话框
+    show(data) {
+      this.dialogFormVisible = true;
+      if (data == undefined) {
+        this.$nextTick(() => {
+          this.isEdit = false;
+          // 避免编辑之后新增出问题
+          // 直接设置一个新对象
+          this.form = {
+            eid: "",
+            name: "",
+            short_name: "",
+            intro: "",
+            remark: ""
+          };
+          this.$refs.enterpriseDialog.resetFields();
+        });
+      } else {
+        this.$nextTick(() => {
+          this.isEdit = true;
+          this.form = data;
+        });
+      }
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -88,19 +112,19 @@ export default {
                 this.$message.warning("企业编号不能重复,请检查");
               }
             });
-          }else{
-             enterpriseAdd(this.form).then(res => {
+          } else {
+            enterpriseAdd(this.form).then(res => {
               if (res.code == 201) {
-                this.$message.error('企业编号不能重复')
-              }else if (res.code == 200) {
-                this.$message.success('数据新增成功');
+                this.$message.error("企业编号不能重复");
+              } else if (res.code == 200) {
+                this.$message.success("数据新增成功");
                 // 关闭对话框
                 this.dialogFormVisible = false;
                 // 清空表单
                 this.$refs[formName].resetFields();
-                this.$parent.getData()
+                this.$parent.getData();
               }
-            })
+            });
           }
         } else {
           this.$message.error("数据校验失败,请检查");
