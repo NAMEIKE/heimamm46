@@ -36,7 +36,7 @@
           <el-button
             icon="el-icon-plus"
             type="primary"
-            @click="$refs.enterpriseAdd.dialogFormVisible = true"
+            @click="added"
             >新增企业</el-button
           >
         </el-form-item>
@@ -104,19 +104,22 @@
       >
       </el-pagination>
     </el-card>
-    <enterpriseAdd ref="enterpriseAdd"></enterpriseAdd>
-    <enterpriseEdit ref="enterpriseEdit"></enterpriseEdit>
+    <!-- <enterpriseAdd ref="enterpriseAdd"></enterpriseAdd>
+    <enterpriseEdit ref="enterpriseEdit"></enterpriseEdit> -->
+    <enterpriseDialog ref="enterpriseDialog"></enterpriseDialog>
   </div>
 </template>
 <script>
 import {enterpriseList,enterpriseRemove,enterpriseStatus} from '@/api/enterprise.js'
-import enterpriseAdd from './components/enterpriseAdd.vue'
-import enterpriseEdit from './components/enterpriseEdit.vue'
+// import enterpriseAdd from './components/enterpriseAdd.vue'
+// import enterpriseEdit from './components/enterpriseEdit.vue'
+import enterpriseDialog from './components/enterpriseDialog.vue'
 export default {
   name: "enterprise",
   components: {
-    enterpriseAdd,
-    enterpriseEdit
+    // enterpriseAdd,
+    // enterpriseEdit
+    enterpriseDialog
   },
   data() {
     return {
@@ -156,6 +159,18 @@ export default {
       this.index = newIndex;
       this.getData()
     },
+    // 新增按钮
+    added() {
+      this.$refs.enterpriseDialog.dialogFormVisible = true;
+      // this.$refs.enterpriseDialog.isEdit = false;
+      // if (this.$refs.enterpriseDialog.$refs.enterpriseDialog != null) {
+      //   this.$refs.enterpriseDialog.$refs.enterpriseDialog.resetFields();
+      // }
+      this.$refs.enterpriseDialog.$nextTick(() => {
+        this.$refs.enterpriseDialog.isEdit = false;
+        this.$refs.enterpriseDialog.$refs.enterpriseDialog.resetFields();
+      })
+    },
     // 企业查询
     searchEnterprise() {
        // 跳回第一页
@@ -173,16 +188,21 @@ export default {
     handleEdit(index,row) {
        // window.console.log(index, row);
       // 弹出编辑
-      this.$refs.enterpriseEdit.dialogFormVisible = true;
-      // 如果id改变了，说明是重新编辑 再赋值
-      if (row.id != this.$refs.enterpriseEdit.form.id) {
-        // 把这一行的数据赋值给弹框
-        // this.$refs.subjectEdit.form = row;
-        // 复杂数据赋值有联动,要经过特殊转换处理
-        this.$refs.enterpriseEdit.form = JSON.parse(JSON.stringify(row));
-      } else {
-        // 相等的不用执行
-      }
+      this.$refs.enterpriseDialog.dialogFormVisible = true;
+      // this.$refs.enterpriseDialog.isEdit = true;
+      // // 如果id改变了，说明是重新编辑 再赋值
+      // if (row.id != this.$refs.enterpriseDialog.form.id) {
+      //   // 把这一行的数据赋值给弹框
+      //   // this.$refs.subjectEdit.form = row;
+      //   // 复杂数据赋值有联动,要经过特殊转换处理
+      //   this.$refs.enterpriseDialog.form = JSON.parse(JSON.stringify(row));
+      // } else {
+      //   // 相等的不用执行
+      // }
+      this.$refs.enterpriseDialog.$nextTick(() => {
+        this.$refs.enterpriseDialog.isEdit = true;
+        this.$refs.enterpriseDialog.form = JSON.parse(JSON.stringify(row));
+      })
     },
     // 状态修改
     handleStatus(index,row) {
